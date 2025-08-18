@@ -7,6 +7,7 @@ import Navbar from './components/navbar';
 import Footer from './components/Footer';
 import ActiveFilters from './components/ActiveFilters';
 import JobDetailsModal from './components/JobDetailsModal';
+import { dummyJobs } from './dummyData'; // Import the dummy data
 
 import { Container, Grid, Typography, CircularProgress, Box, Alert, Modal, Paper, Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
@@ -42,6 +43,7 @@ function App() {
       setError(null);
     } catch (err) {
       setError('Failed to connect to the server. Displaying sample data.');
+      setJobs(dummyJobs); // <-- THIS IS THE ONLY LOGICAL CHANGE
       console.error(err);
     } finally {
       setLoading(false);
@@ -65,44 +67,33 @@ function App() {
   const handleOpenAddModal = () => { setJobToEdit(null); setOpenAddEditModal(true); };
   const handleOpenEditModal = (job) => { setJobToEdit(job); setOpenAddEditModal(true); };
   const handleCloseAddEditModal = () => { setOpenAddEditModal(false); setJobToEdit(null); };
+
   const handleOpenDetailsModal = (job) => setSelectedJobDetails(job);
   const handleCloseDetailsModal = () => setSelectedJobDetails(null);
 
-  // --- MODIFIED FUNCTION ---
   const handleSaveJob = async (jobData, jobId) => {
-    if (error) { 
-      toast.error("Cannot save in offline mode."); 
-      return; 
-    }
-    setIsSubmitting(true); // Disable buttons
+    if (error) { toast.error("Cannot save in offline mode."); return; }
+    setIsSubmitting(true);
     const isEditing = !!jobId;
-    const action = isEditing 
-      ? axios.put(`${API_URL}/jobs/${jobId}`, jobData) 
-      : axios.post(`${API_URL}/jobs`, jobData);
+    const action = isEditing ? axios.put(`${API_URL}/jobs/${jobId}`, jobData) : axios.post(`${API_URL}/jobs`, jobData);
     try {
       await action;
-      // Show success feedback
-      toast.success(isEditing ? 'Job updated successfully!' : 'Job added successfully!');
-      handleCloseAddEditModal();
+      toast.success(isEditing ? 'Job updated' : 'Job added');
       fetchJobs();
     } catch (err) {
       toast.error('Failed to save job.');
     } finally {
-      setIsSubmitting(false); // Re-enable buttons
+      setIsSubmitting(false);
+      handleCloseAddEditModal();
     }
   };
 
-  // --- MODIFIED FUNCTION ---
   const handleDeleteJob = async (jobId) => {
-    if (error) { 
-      toast.error("Cannot delete in offline mode."); 
-      return; 
-    }
+    if (error) { toast.error("Cannot delete in offline mode."); return; }
     if (window.confirm('Are you sure you want to delete this job?')) {
       try {
         await axios.delete(`${API_URL}/jobs/${jobId}`);
-        // Show success feedback
-        toast.success('Job deleted successfully!');
+        toast.success('Job deleted');
         fetchJobs();
       } catch (err) {
         toast.error('Failed to delete job.');
