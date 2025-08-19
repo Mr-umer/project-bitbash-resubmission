@@ -30,7 +30,7 @@ function App() {
   const [filters, setFilters] = useState(initialFilters);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchJobs = useCallback(async () => {
+    const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
       const params = {};
@@ -41,11 +41,24 @@ function App() {
       if (filters.sort) params.sort = filters.sort;
 
       const response = await axios.get(`${API_URL}/jobs`, { params });
-      setJobs(response.data);
+      
+      // --- THIS IS THE FIX ---
+      // Check if the response data is an array. If not, something is wrong,
+      // but we will gracefully handle it by setting jobs to an empty array.
+      if (Array.isArray(response.data)) {
+        setJobs(response.data);
+      } else {
+        // This handles cases where the API might return an object like {jobs: [...]}
+        // or something unexpected. We default to an empty list to prevent a crash.
+        console.warn("API did not return an array. Response:", response.data);
+        setJobs([]);
+      }
+      // -----------------------
+
       setError(null);
     } catch (err) {
       setError('Failed to connect to the server. Displaying sample data.');
-      setJobs(dummyJobs); // <-- THIS IS THE ONLY LOGICAL CHANGE
+      setJobs(dummyJobs); // Fallback is still here
       console.error(err);
     } finally {
       setLoading(false);
