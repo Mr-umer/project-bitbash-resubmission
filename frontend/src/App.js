@@ -13,7 +13,9 @@ import { Container, Grid, Typography, CircularProgress, Box, Alert, Modal, Paper
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : 'http://127.0.0.1:5000/api';
 const initialFilters = { search: '', location: '', job_type: 'All', tags: '', sort: 'date_desc' };
 const JOBS_PER_PAGE = 12;
 

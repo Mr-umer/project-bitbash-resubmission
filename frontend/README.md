@@ -2,7 +2,7 @@ AlphaCareers - Full-Stack Job Board
 AlphaCareers is a comprehensive, full-stack job board application designed for quantitative professionals in the fields of risk, data, and finance. This project was developed as a take-home assessment for a full-stack developer position. It features a complete CRUD API, a data scraper for populating the job board, and a polished, responsive React user interface.
 
 
-
+Link to Video: https://drive.google.com/file/d/1yMY75J1raHOsKV7dqLmEzkB7mRFL1tec/view?usp=drive_link
 Table of Contents
 Project Overview
 Features
@@ -49,8 +49,8 @@ Python (3.10+)
 Node.js & npm (18.0+)
 A running MySQL server instance
 1. Clone the Repository
-git https://github.com/Mr-umer/project-bitbash
-cd project-bitbash
+git https://github.com/Mr-umer/project-bitbash-resubmission
+cd project-bitbash - Copy
 2. Backend Setup
 # Navigate to the backend directory
 cd backend
