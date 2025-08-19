@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import JobCard from './components/JobRow';
+import JobCard from './components/JobCard';
 import AddJobForm from './components/AddJobForm';
 import FilterBar from './components/FilterBar';
 import Navbar from './components/navbar';
